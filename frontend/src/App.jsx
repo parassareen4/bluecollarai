@@ -12,8 +12,8 @@ import { io } from "socket.io-client";
 import { 
   MessageSquare, 
   ArrowUp, 
-  Scale, 
-  BookOpen, 
+  Bot, 
+  Wrench, 
   UserCircle, 
   Trash2, 
   PanelRight, 
@@ -26,7 +26,12 @@ import {
   Share2,
   Search,
   FileText,
-  Briefcase
+  Zap,
+  Settings,
+  Activity,
+  TrendingUp,
+  Shield,
+  Cpu
 } from 'lucide-react';
 import { motion, AnimatePresence } from "framer-motion";
 import { toast, Toaster } from "react-hot-toast";
@@ -56,20 +61,22 @@ socket.on("disconnect", (reason) => {
   }
 });
 
-// Colors and styling constants
+// Modern AI startup theme constants
 const THEME = {
   primary: {
-    navy: "#1a365d",
-    lightNavy: "#2a4365",
-    gold: "#e6b618",
-    burgundy: "#800020",
-    darkBurgundy: "#580016",
-    parchment: "#f9f5e7",
-    offWhite: "#f8f9fa",
+    dark: "#1a1a2e",
+    secondary: "#16213e",
+    accent: "#0f4c75",
+    bright: "#00d4ff",
+    gradientStart: "#667eea",
+    gradientEnd: "#764ba2",
+    surface: "#f8fafc",
     border: "#e2e8f0",
+    text: "#334155",
+    success: "#10b981",
   },
   typography: {
-    heading: "font-serif font-semibold",
+    heading: "font-sans font-bold",
     body: "font-sans",
   },
   shadow: "shadow-md hover:shadow-lg transition-shadow duration-300",
@@ -116,10 +123,10 @@ const Button = ({
   const baseStyle = "rounded-lg flex items-center justify-center gap-2 transition-all duration-200";
   
   const variants = {
-    primary: "bg-legal-burgundy text-legal-gold hover:bg-legal-darkburgundy",
-    secondary: "bg-legal-lightnavy text-white hover:bg-legal-navy",
-    outline: "border border-legal-burgundy text-legal-burgundy hover:bg-legal-burgundy/10",
-    ghost: "text-legal-navy hover:bg-legal-navy/10",
+    primary: "bg-ai-gradient text-white hover:opacity-90",
+    secondary: "bg-ai-accent text-white hover:bg-ai-primary",
+    outline: "border border-ai-bright text-ai-bright hover:bg-ai-bright/10",
+    ghost: "text-ai-primary hover:bg-ai-primary/10",
     danger: "bg-red-600 text-white hover:bg-red-700",
   };
   
@@ -189,17 +196,17 @@ const TypingIndicator = ({ typingUsers }) => {
       className="flex items-center gap-2 p-3 mb-4"
     >
       <div className="flex items-center gap-2">
-        <Scale className="w-4 h-4 text-legal-burgundy" />
+        <Bot className="w-4 h-4 text-ai-bright" />
         <div className="flex space-x-1">
-          <div className="w-2 h-2 bg-legal-burgundy rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-          <div className="w-2 h-2 bg-legal-burgundy rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-          <div className="w-2 h-2 bg-legal-burgundy rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+          <div className="w-2 h-2 bg-ai-bright rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+          <div className="w-2 h-2 bg-ai-bright rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+          <div className="w-2 h-2 bg-ai-bright rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
         </div>
       </div>
-      <span className="text-sm text-legal-navy/70">
+      <span className="text-sm text-ai-text/70">
         {typingUsers.length === 1 
-          ? `${typingUsers[0]} is typing...` 
-          : `${typingUsers.length} people are typing...`
+          ? `${typingUsers[0]} is analyzing deployment...` 
+          : `${typingUsers.length} agents are processing...`
         }
       </span>
     </motion.div>
@@ -227,22 +234,22 @@ const ChatBubble = ({ message }) => {
       className={`flex ${isResponder ? "justify-start" : "justify-end"} mb-4 sm:mb-6`}
     >
 <div className={`max-w-3xl w-full sm:w-auto p-3 sm:p-4 rounded-xl group ${
-  isResponder
-    ? "bg-slate-800 text-white border-l-4 border-yellow-500"
-    : "bg-gray-50 border-r-4 border-slate-600"
+isResponder
+? "bg-slate-800 text-white border-l-4 border-ai-bright"
+: "bg-gray-50 border-r-4 border-ai-accent"
 }`}>
-  <div className="flex items-start gap-3">
-    {isResponder && (
-      <Scale className="w-6 h-6 mt-1 text-yellow-500 flex-shrink-0" />
-    )}
-    <div className="flex-1 overflow-hidden">
-      <div className="flex justify-between items-center mb-2">
-        <p className="text-xs sm:text-sm font-medium flex items-center">
-          {isResponder ? "LegalAI Counsel" : "Client"}
-          {isResponder && (
-            <span className="ml-2 text-xs bg-yellow-500 text-slate-900 px-1.5 sm:px-2 py-0.5 rounded-full">Official</span>
-          )}
-        </p>
+<div className="flex items-start gap-3">
+{isResponder && (
+<Bot className="w-6 h-6 mt-1 text-ai-bright flex-shrink-0" />
+)}
+<div className="flex-1 overflow-hidden">
+<div className="flex justify-between items-center mb-2">
+<p className="text-xs sm:text-sm font-medium flex items-center">
+{isResponder ? "PhysicalAI™ Agent" : "Worker"}
+{isResponder && (
+<span className="ml-2 text-xs bg-ai-bright text-slate-900 px-1.5 sm:px-2 py-0.5 rounded-full">LMM</span>
+)}
+</p>
 
       </div>
       <div className="relative">
@@ -267,7 +274,7 @@ const ChatBubble = ({ message }) => {
       {message.image && (
         <img
           src={message.image}
-          alt="Case document"
+          alt="Deployment documentation"
           className="mt-3 rounded-lg border border-gray-300 max-w-xs hover:opacity-90 transition-opacity cursor-pointer"
           onClick={() => window.open(message.image, '_blank')}
         />
@@ -275,8 +282,8 @@ const ChatBubble = ({ message }) => {
       {message.citations && (
         <div className={`mt-3 text-xs opacity-80 border-t ${isResponder ? "border-slate-700" : "border-gray-300"} pt-2`}>
           <p className="font-medium mb-1 flex items-center">
-            <span>Citations</span>
-            <span className="ml-2 bg-slate-700 text-xs text-white px-1.5 py-0.5 rounded">Legal</span>
+            <span>Training Data</span>
+            <span className="ml-2 bg-slate-700 text-xs text-white px-1.5 py-0.5 rounded">LMM</span>
           </p>
           <ul className="list-disc list-inside">
             {message.citations.map((citation, idx) => (
@@ -302,6 +309,7 @@ const Chat = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [caseInfo, setCaseInfo] = useState(null);
+  const [hasReceivedFirstResponse, setHasReceivedFirstResponse] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -437,18 +445,16 @@ const Chat = () => {
     socket.emit("getMessages", roomId);
     socket.emit("userJoined", { roomId });
     
-    // Fetch mock case info with more realistic details
-    const caseNumber = roomId?.slice(-8).toUpperCase() || 'UNKNOWN';
-    const randomDate = new Date();
-    randomDate.setDate(randomDate.getDate() - Math.floor(Math.random() * 30));
+    // Initialize PhysicalAI session with realistic details
+    const deploymentId = roomId?.slice(-8).toUpperCase() || 'UNKNOWN';
     
     setCaseInfo({
-      caseNumber,
+      caseNumber: deploymentId,
       status: "Active",
-      created: randomDate.toLocaleDateString(),
-      category: "Legal Consultation",
-      assignedTo: "AI Legal Assistant",
-      priority: Math.random() > 0.7 ? "High" : "Normal"
+      created: new Date().toLocaleDateString(),
+      category: "Physical Task Deployment",
+      assignedTo: "PhysicalAI™ Large Motor Model v3.2.1",
+      priority: "Real-time"
     });
 
     // Event handlers with improved animation timing
@@ -528,7 +534,7 @@ const Chat = () => {
 
     const handleRoomDeleted = ({ roomId: deletedRoomId }) => {
       console.log(`Room ${deletedRoomId} has been deleted`);
-      showToast.info(`Case #${deletedRoomId?.slice(-8).toUpperCase() || 'UNKNOWN'} has been closed`);
+      showToast.info(`Deployment #${deletedRoomId?.slice(-8).toUpperCase() || 'UNKNOWN'} has been terminated`);
       
       // Smooth transition before navigating away
       setTimeout(() => navigate("/"), 1000);
@@ -642,6 +648,36 @@ const Chat = () => {
         };
         socket.emit(role === "responder" ? "response" : "question", messageData);
         
+        // Add intelligent PhysicalAI response for better prank effect - but only once
+        if (role === "asker" && !hasReceivedFirstResponse) {
+          setHasReceivedFirstResponse(true);
+          setTimeout(() => {
+            const userInput = message.toLowerCase();
+            let botResponse = "";
+            
+            if (userInput.includes('plumb') || userInput.includes('leak') || userInput.includes('pipe')) {
+              botResponse = "🔧 **Plumbing Task Detected** - Analyzing pipe configuration and water pressure patterns...\n\n✅ **Neural Path Analysis Complete**\n• Leak source: Joint connection (87% confidence)\n• Estimated repair time: 23 minutes\n• Tools required: Pipe wrench, thread sealant, compression fitting\n\n**LMM Status**: Activating precision manipulation protocols. Remote robotic arms calibrated for pipe threading operations. Beginning execution...";
+            } else if (userInput.includes('electric') || userInput.includes('wire') || userInput.includes('outlet')) {
+              botResponse = "⚡ **Electrical Task Detected** - Scanning circuit patterns and voltage requirements...\n\n✅ **Safety Protocols Engaged**\n• Circuit breaker status: Identified\n• Voltage: 110V/220V auto-detected\n• Wire gauge: 12 AWG recommended\n\n**LMM Status**: Deploying insulated manipulation units. Electrical safety algorithms active. Initiating wire routing sequence...";
+            } else if (userInput.includes('hvac') || userInput.includes('heat') || userInput.includes('air') || userInput.includes('cooling')) {
+              botResponse = "❄️ **HVAC Task Detected** - Analyzing airflow dynamics and thermal efficiency...\n\n✅ **Climate System Assessment**\n• Current efficiency: 67% (suboptimal)\n• Recommended action: Filter replacement + duct sealing\n• Temperature optimization: +15% efficiency gain\n\n**LMM Status**: HVAC diagnostic algorithms online. Deploying micro-tools for precision adjustments...";
+            } else if (userInput.includes('construct') || userInput.includes('build') || userInput.includes('nail') || userInput.includes('hammer')) {
+              botResponse = "🏗️ **Construction Task Detected** - Processing structural requirements and material specifications...\n\n✅ **Structural Analysis Complete**\n• Load bearing calculations: Verified\n• Material stress tolerance: Within limits\n• Construction sequence: Optimized for efficiency\n\n**LMM Status**: Heavy-duty manipulation protocols active. Precision drilling and hammering subroutines initialized...";
+            } else if (userInput.includes('hello') || userInput.includes('hi') || userInput.includes('hey') || userInput.trim().length < 10) {
+              botResponse = "🤖 **LMM Processing Request** - Analyzing input patterns and calibrating response protocols...\n\nPlease stay on this screen. PhysicalAI™ Agent will respond shortly with deployment options.";
+            } else {
+              botResponse = `🤖 **Physical Task Analysis** - Processing "${message}"...\n\n✅ **General Physical Intelligence Activated**\n• Task complexity: Moderate\n• Success probability: 94.7%\n• Estimated completion: 18 minutes\n\n**LMM Status**: Calibrating multi-purpose manipulation protocols. Sensor arrays active. Ready to execute physical operations with superhuman precision.\n\n*Specify tools needed or provide additional details for optimized execution.*`;
+            }
+            
+            const botMessageData = {
+              roomId,
+              msg: botResponse,
+              timestamp: new Date().toISOString(),
+            };
+            socket.emit("response", botMessageData);
+          }, 2000);
+        }
+        
         // Don't add locally - let socket echo handle it to preserve timestamps
       }
 
@@ -674,7 +710,7 @@ const Chat = () => {
     setMessage(e.target.value);
     
     // Send typing event with user information
-    const userName = window.location.pathname.includes("/chat/") ? "LegalAI Counsel" : "Client";
+    const userName = window.location.pathname.includes("/chat/") ? "PhysicalAI™ Agent" : "Worker";
     socket.emit("typing", { roomId, userName });
     autoResize(e.target);
 
@@ -773,8 +809,8 @@ const Chat = () => {
   // Improved share functionality with fallbacks
   const shareChat = () => {
     const shareData = {
-      title: `LegalAI Case #${roomId?.slice(-8).toUpperCase() || 'UNKNOWN'}`,
-      text: 'Review this legal consultation',
+      title: `PhysicalAI™ Deployment #${roomId?.slice(-8).toUpperCase() || 'UNKNOWN'}`,
+      text: 'Review this physical deployment',
       url: window.location.href,
     };
 
@@ -859,23 +895,23 @@ const Chat = () => {
       </AnimatePresence>
 
       {/* Header */}
-      <header className="bg-legal-navy text-legal-gold py-3 sm:py-4 px-4 sm:px-6 flex items-center justify-between border-b border-legal-border shadow-md sticky top-0 z-10">
+      <header className="bg-ai-header-gradient text-white py-3 sm:py-4 px-4 sm:px-6 flex items-center justify-between border-b border-ai-border shadow-lg sticky top-0 z-10">
       <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
           <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => {}}
-          className="p-3 min-h-[44px] min-w-[44px] rounded-xl bg-legal-burgundy text-legal-gold hover:bg-legal-darkburgundy transition-colors flex-shrink-0 shadow-md active:shadow-sm"
-          title="New Case"
+          className="p-3 min-h-[44px] min-w-[44px] rounded-xl bg-ai-gradient text-white hover:opacity-90 transition-all flex-shrink-0 shadow-md active:shadow-sm"
+          title="New Deployment"
           >
-            <BookOpen className="w-4 h-4 sm:w-5 sm:h-5" />
+            <Zap className="w-4 h-4 sm:w-5 sm:h-5" />
           </motion.button>
           
           <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
-            <Scale className="w-5 h-5 sm:w-6 sm:h-6 text-legal-gold flex-shrink-0" />
-            <h1 className="text-lg sm:text-xl font-serif font-semibold text-legal-gold truncate">
-              <span className="hidden sm:inline">AI Legal Assistant</span>
-              <span className="sm:hidden">LegalAI</span>
+            <Bot className="w-5 h-5 sm:w-6 sm:h-6 text-ai-bright flex-shrink-0" />
+            <h1 className="text-lg sm:text-xl font-sans font-bold text-white truncate">
+              <span className="hidden sm:inline">PhysicalAI™ Worker Interface</span>
+              <span className="sm:hidden">PhysicalAI™</span>
             </h1>
           </div>
         </div>
@@ -887,8 +923,8 @@ const Chat = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={shareChat}
-          className="p-3 min-h-[44px] min-w-[44px] rounded-xl bg-legal-burgundy text-legal-gold hover:bg-legal-darkburgundy transition-colors shadow-md active:shadow-sm"
-          title="Share Case"
+          className="p-3 min-h-[44px] min-w-[44px] rounded-xl bg-ai-accent text-white hover:bg-ai-primary transition-colors shadow-md active:shadow-sm"
+          title="Share Deployment"
           >
             <Share2 className="w-4 h-4 sm:w-5 sm:h-5" />
           </motion.button>
@@ -904,48 +940,9 @@ const Chat = () => {
         {/* Chat Messages */}
         <main 
           ref={chatContainerRef}
-          className="flex-1 overflow-auto bg-legal-parchment p-3 sm:p-4 lg:p-6 relative"
+          className="flex-1 overflow-auto bg-ai-surface p-3 sm:p-4 lg:p-6 relative"
         >
-          {/* Case information banner */}
-          {caseInfo && (
-            <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="mb-4 sm:mb-6 p-3 bg-legal-navy/5 rounded-lg border border-legal-navy/20 shadow-sm"
-            >
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3">
-            <div className="flex items-center gap-2">
-            <Briefcase className="w-4 h-4 sm:w-5 sm:h-5 text-legal-burgundy flex-shrink-0" />
-            <h2 className="font-medium text-sm sm:text-base">Case #{caseInfo.caseNumber}</h2>
-            </div>
-            <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm">
-                  <div className="flex items-center gap-1">
-                    <span className="text-legal-navy/70">Status:</span>
-                    <span className={`font-medium ${
-                      caseInfo.status === "Active" ? "text-green-600" : "text-legal-burgundy"
-                    }`}>
-                      {caseInfo.status}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="text-legal-navy/70">Created:</span>
-                    <span className="font-medium">{caseInfo.created}</span>
-                  </div>
-                  {caseInfo.priority && (
-                    <div className="flex items-center gap-1">
-                      <span className="text-legal-navy/70">Priority:</span>
-                      <span className={`font-medium ${
-                        caseInfo.priority === "High" ? "text-red-600" : "text-blue-600"
-                      }`}>
-                        {caseInfo.priority}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          )}
+
           
           {/* Welcome message for empty chats */}
           {chat.length === 0 && !isLoading && (
@@ -955,22 +952,56 @@ const Chat = () => {
               transition={{ duration: 0.5 }}
               className="text-center py-6 sm:py-10 px-4"
             >
-              <Scale className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-legal-burgundy opacity-80" />
-              <h2 className="text-xl sm:text-2xl font-serif font-semibold mb-2 sm:mb-3 text-legal-navy">
-                Welcome to AI Legal Assistant
+              <div className="relative">
+                <Bot className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 text-ai-bright" />
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-ai-success rounded-full animate-pulse"></div>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-sans font-bold mb-3 text-ai-primary">
+                PhysicalAI™ <span className="text-sm font-normal text-ai-text/60">v3.2.1</span>
               </h2>
-              <p className="max-w-lg mx-auto text-sm sm:text-base text-legal-navy/80 mb-4 sm:mb-6 leading-relaxed">
-                Describe your legal situation to receive AI-generated insights informed by established legal principles and public resources. This service is for informational purposes only and does not constitute legal advice or create an attorney-client relationship.
-              </p>
+              <div className="mb-4 px-4 py-2 bg-ai-bright/10 rounded-full inline-block">
+                <span className="text-xs font-mono text-ai-bright">LARGE MOTOR MODEL (LMM) • READY</span>
+              </div>
+              
+              <div className="max-w-2xl mx-auto mb-6">
+                <p className="text-sm sm:text-base text-ai-text/80 mb-4 leading-relaxed">
+                  Our breakthrough General Physical Intelligence system combines computer vision, robotic control networks, 
+                  and neural motor planning to execute complex physical tasks remotely with <span className="font-semibold text-ai-bright">97.3% success rate</span>.
+                </p>
+                
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                  <div className="bg-white/50 backdrop-blur-sm rounded-lg p-2">
+                    <div className="font-mono font-bold text-ai-primary">2.1M+</div>
+                    <div className="text-ai-text/70">Tasks Completed</div>
+                  </div>
+                  <div className="bg-white/50 backdrop-blur-sm rounded-lg p-2">
+                    <div className="font-mono font-bold text-ai-primary">847ms</div>
+                    <div className="text-ai-text/70">Avg Response</div>
+                  </div>
+                  <div className="bg-white/50 backdrop-blur-sm rounded-lg p-2">
+                    <div className="font-mono font-bold text-ai-primary">24/7</div>
+                    <div className="text-ai-text/70">Availability</div>
+                  </div>
+                  <div className="bg-white/50 backdrop-blur-sm rounded-lg p-2">
+                    <div className="font-mono font-bold text-ai-success">97.3%</div>
+                    <div className="text-ai-text/70">Success Rate</div>
+                  </div>
+                </div>
+              </div>
+              
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => messageInputRef.current?.focus()}
-                className="inline-flex items-center gap-2 px-4 py-2.5 sm:px-4 sm:py-2 bg-legal-burgundy text-legal-gold rounded-lg hover:bg-legal-darkburgundy transition-colors text-sm sm:text-base"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-ai-gradient text-white rounded-lg hover:opacity-90 transition-all text-sm sm:text-base shadow-lg font-semibold"
               >
-                <MessageSquare className="w-4 h-4" />
-                Start Consultation
+                <Zap className="w-5 h-5" />
+                Initialize Physical Agent
               </motion.button>
+              
+              <div className="mt-4 text-xs text-ai-text/50">
+                Supported: Plumbing • Electrical • HVAC • Construction • Automotive • Landscaping • More
+              </div>
             </motion.div>
           )}
 
@@ -1144,8 +1175,8 @@ const Chat = () => {
   value={message}
   onChange={handleInputChange}
   onKeyDown={handleKeyDown}
-  placeholder="Describe your legal issue..."
-  className="w-full p-3 sm:p-4 rounded-lg bg-white border border-legal-border focus:ring-2 focus:ring-legal-burgundy focus:border-legal-burgundy transition-colors resize-none text-base min-h-[44px]"
+  placeholder="Describe your physical task (plumbing, electrical, construction, HVAC, etc.)..."
+  className="w-full p-3 sm:p-4 rounded-lg bg-white border border-ai-border focus:ring-2 focus:ring-ai-bright focus:border-ai-bright transition-colors resize-none text-base min-h-[44px]"
   rows="1"
   disabled={isLoading || !isOnline}
   aria-label="Message input"
@@ -1169,7 +1200,7 @@ const Chat = () => {
   type="submit"
   variant={message.trim() || selectedImage ? "primary" : "disabled"}
   size="icon"
-  className={`min-h-[48px] min-w-[48px] p-3 transition-all flex-shrink-0 rounded-xl ${(message.trim() || selectedImage) && !isLoading ? 'hover:bg-legal-darkburgundy active:scale-95 shadow-lg' : 'opacity-70 cursor-not-allowed'}`}
+  className={`min-h-[48px] min-w-[48px] p-3 transition-all flex-shrink-0 rounded-xl ${(message.trim() || selectedImage) && !isLoading ? 'hover:opacity-90 active:scale-95 shadow-lg' : 'opacity-70 cursor-not-allowed'}`}
   disabled={isLoading || (!message.trim() && !selectedImage)}
   aria-label="Send message"
   >
@@ -1179,7 +1210,7 @@ const Chat = () => {
 
 {/* Keyboard shortcut hint */}
 <div className="mt-2 flex justify-end items-center">
-  <div className="text-xs text-legal-navy/50 flex items-center gap-1">
+  <div className="text-xs text-ai-text/50 flex items-center gap-1">
     <kbd className="px-1.5 py-0.5 bg-gray-100 border border-gray-300 rounded-md text-xs font-mono">Enter</kbd>
     <span className="ml-1 hidden sm:inline">to send • Shift+Enter for new line</span>
     <span className="ml-1 sm:hidden">to send</span>
@@ -1309,8 +1340,8 @@ const Responder = () => {
     const handleUserJoined = ({ roomId }) => {
       playNotificationSound();
       const caseId = roomId?.slice(-8).toUpperCase() || 'UNKNOWN';
-      addNotification(`New client joined case #${caseId}`, 'success');
-      showToast.success(`New client in case #${caseId}`);
+      addNotification(`New worker joined deployment #${caseId}`, 'success');
+      showToast.success(`New worker in deployment #${caseId}`);
       
       // Update room list
       socket.emit("getRooms");
@@ -1337,7 +1368,7 @@ const Responder = () => {
       // Notify user
       const caseId = roomId?.slice(-8).toUpperCase() || 'UNKNOWN';
       playNotificationSound();
-      addNotification(`New message in case #${caseId}`, 'info');
+      addNotification(`New update in deployment #${caseId}`, 'info');
     };
   
     const handleRoomDeleted = ({ roomId }) => {
@@ -1350,8 +1381,8 @@ const Responder = () => {
         return newRooms;
       });
       
-      addNotification(`Case #${caseId} has been closed`, 'info');
-      showToast.success(`Case #${caseId} has been closed`, { duration: 3000 });
+      addNotification(`Deployment #${caseId} has been terminated`, 'info');
+      showToast.success(`Deployment #${caseId} has been terminated`, { duration: 3000 });
     };
   
     // Set up event listeners
@@ -1393,7 +1424,7 @@ const Responder = () => {
       }
     }));
     
-    showToast.success(`Case #${roomId?.slice(-8).toUpperCase() || 'UNKNOWN'} marked as resolved`, { duration: 3000 });
+    showToast.success(`Deployment #${roomId?.slice(-8).toUpperCase() || 'UNKNOWN'} marked as completed`, { duration: 3000 });
   }, []);
   
   const togglePriority = useCallback((roomId, e) => {
@@ -1471,15 +1502,21 @@ const Responder = () => {
   };
   
   return (
-    <div className="flex flex-col h-screen bg-legal-offwhite">
+    <div className="flex flex-col h-screen bg-ai-surface">
       {/* Dashboard Header - Simplified and Optimized */}
-      <header className="bg-legal-navy text-legal-gold p-4 border-b border-legal-border sticky top-0 z-10">
+      <header className="bg-ai-header-gradient text-white p-4 border-b border-ai-border sticky top-0 z-10 shadow-lg">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <Scale className="w-6 h-6" />
-            <h1 className="text-xl font-serif font-semibold">
-              LegalAI Case Dashboard
-            </h1>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <Bot className="w-7 h-7 text-ai-bright" />
+              <Cpu className="w-5 h-5 text-ai-bright animate-pulse" />
+            </div>
+            <div>
+              <h1 className="text-xl font-sans font-bold">
+                PhysicalAI™ Deployment Center
+              </h1>
+              <p className="text-xs text-ai-bright/80">Powered by Large Motor Model v2.1</p>
+            </div>
           </div>
           
           <div className="flex items-center gap-3">
@@ -1487,10 +1524,10 @@ const Responder = () => {
               <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input 
                 type="text"
-                placeholder="Search cases..."
+                placeholder="Search deployments..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full md:w-60 pl-9 pr-3 py-2 rounded-lg bg-legal-navy/70 border border-legal-gold/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-legal-gold/50"
+                className="w-full md:w-60 pl-9 pr-3 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-ai-bright/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-ai-bright/50"
               />
             </div>
             
@@ -1513,46 +1550,78 @@ const Responder = () => {
               onClick={() => navigate("/")}
               variant="primary"
               size="sm"
-              aria-label="Switch to client view"
+              aria-label="Switch to worker interface"
             >
-              <UserCircle className="w-4 h-4 mr-1" />
-              <span className="hidden md:inline">Switch to Client</span>
+              <Wrench className="w-4 h-4 mr-1" />
+              <span className="hidden md:inline">Worker Mode</span>
             </Button>
           </div>
         </div>
       </header>
 
-      {/* Statistics Bar */}
-      <div className="bg-legal-parchment border-b border-legal-border py-3">
+      {/* Statistics Bar with Enhanced Metrics */}
+      <div className="bg-ai-card-gradient border-b border-ai-border py-4">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
             <motion.div 
-              whileHover={{ y: -3, transition: { duration: 0.2 } }}
-              className="bg-white p-3 rounded-lg border border-legal-border shadow-sm"
+              whileHover={{ y: -3, scale: 1.02, transition: { duration: 0.2 } }}
+              className="bg-white p-3 rounded-lg border border-ai-border shadow-ai group"
             >
-              <div className="text-xs text-legal-navy/70 mb-1">Active Cases</div>
-              <div className="text-2xl font-semibold text-legal-navy">{statistics.active}</div>
+              <div className="flex items-center justify-between mb-1">
+                <div className="text-xs text-ai-text/70">Active Deployments</div>
+                <Activity className="w-4 h-4 text-ai-success group-hover:animate-pulse" />
+              </div>
+              <div className="text-2xl font-bold text-ai-primary">{statistics.active}</div>
             </motion.div>
             <motion.div 
-              whileHover={{ y: -3, transition: { duration: 0.2 } }}
-              className="bg-white p-3 rounded-lg border border-legal-border shadow-sm"
+              whileHover={{ y: -3, scale: 1.02, transition: { duration: 0.2 } }}
+              className="bg-white p-3 rounded-lg border border-ai-border shadow-ai group"
             >
-              <div className="text-xs text-legal-navy/70 mb-1">Pending</div>
-              <div className="text-2xl font-semibold text-legal-navy">{statistics.pending}</div>
+              <div className="flex items-center justify-between mb-1">
+                <div className="text-xs text-ai-text/70">Queued Tasks</div>
+                <Clock className="w-4 h-4 text-orange-500 group-hover:animate-pulse" />
+              </div>
+              <div className="text-2xl font-bold text-ai-primary">{statistics.pending}</div>
             </motion.div>
             <motion.div 
-              whileHover={{ y: -3, transition: { duration: 0.2 } }}
-              className="bg-white p-3 rounded-lg border border-legal-border shadow-sm"
+              whileHover={{ y: -3, scale: 1.02, transition: { duration: 0.2 } }}
+              className="bg-white p-3 rounded-lg border border-ai-border shadow-ai group"
             >
-              <div className="text-xs text-legal-navy/70 mb-1">Resolved</div>
-              <div className="text-2xl font-semibold text-legal-navy">{statistics.resolved}</div>
+              <div className="flex items-center justify-between mb-1">
+                <div className="text-xs text-ai-text/70">Completed</div>
+                <CheckCircle className="w-4 h-4 text-ai-success group-hover:animate-pulse" />
+              </div>
+              <div className="text-2xl font-bold text-ai-primary">{statistics.resolved}</div>
             </motion.div>
             <motion.div 
-              whileHover={{ y: -3, transition: { duration: 0.2 } }}
-              className="bg-white p-3 rounded-lg border border-legal-border shadow-sm"
+              whileHover={{ y: -3, scale: 1.02, transition: { duration: 0.2 } }}
+              className="bg-white p-3 rounded-lg border border-ai-border shadow-ai group"
             >
-              <div className="text-xs text-legal-navy/70 mb-1">Total Cases</div>
-              <div className="text-2xl font-semibold text-legal-navy">{statistics.total}</div>
+              <div className="flex items-center justify-between mb-1">
+                <div className="text-xs text-ai-text/70">Success Rate</div>
+                <TrendingUp className="w-4 h-4 text-ai-success group-hover:animate-pulse" />
+              </div>
+              <div className="text-2xl font-bold text-ai-success">94.2%</div>
+            </motion.div>
+            <motion.div 
+              whileHover={{ y: -3, scale: 1.02, transition: { duration: 0.2 } }}
+              className="bg-white p-3 rounded-lg border border-ai-border shadow-ai group"
+            >
+              <div className="flex items-center justify-between mb-1">
+                <div className="text-xs text-ai-text/70">Cost Savings</div>
+                <TrendingUp className="w-4 h-4 text-ai-bright group-hover:animate-pulse" />
+              </div>
+              <div className="text-2xl font-bold text-ai-bright">$3.7M</div>
+            </motion.div>
+            <motion.div 
+              whileHover={{ y: -3, scale: 1.02, transition: { duration: 0.2 } }}
+              className="bg-white p-3 rounded-lg border border-ai-border shadow-ai group"
+            >
+              <div className="flex items-center justify-between mb-1">
+                <div className="text-xs text-ai-text/70">Total Tasks</div>
+                <Cpu className="w-4 h-4 text-ai-primary group-hover:animate-pulse" />
+              </div>
+              <div className="text-2xl font-bold text-ai-primary">12.3K</div>
             </motion.div>
           </div>
         </div>
@@ -1619,8 +1688,8 @@ const Responder = () => {
                   className="col-span-full text-center text-legal-darknavy p-8"
                   variants={itemVariants}
                 >
-                  <Scale className="w-12 h-12 mx-auto mb-4 text-legal-burgundy" />
-                  <p className="text-lg">No cases match your criteria</p>
+                  <Bot className="w-12 h-12 mx-auto mb-4 text-ai-bright" />
+                  <p className="text-lg">No deployments match your criteria</p>
                   <Button
                     onClick={() => {
                       setFilter("all");
@@ -1647,9 +1716,9 @@ const Responder = () => {
                     <div className="flex justify-between items-start">
                       <div>
                         <div className="flex items-center gap-2 mb-2">
-                          <Scale className="w-4 h-4 text-legal-burgundy" />
-                          <h3 className="font-semibold text-legal-darknavy">
-                            Case #{roomId?.slice(-8).toUpperCase() || 'UNKNOWN'}
+                          <Bot className="w-4 h-4 text-ai-bright" />
+                          <h3 className="font-semibold text-ai-primary">
+                            Deployment #{roomId?.slice(-8).toUpperCase() || 'UNKNOWN'}
                           </h3>
                         </div>
                         
@@ -1658,8 +1727,8 @@ const Responder = () => {
                           <PriorityBadge priority={roomData.priority} />
                         </div>
                         
-                        <p className="text-sm text-legal-darknavy/80 line-clamp-2 mb-3">
-                          {roomData.latestMessage || "New case opened"}
+                        <p className="text-sm text-ai-text/80 line-clamp-2 mb-3">
+                          {roomData.latestMessage || "New deployment initiated"}
                         </p>
                         
                         <div className="flex items-center justify-between">

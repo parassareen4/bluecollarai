@@ -19,25 +19,42 @@
     white-space: pre-wrap;
 }
 :root {
-    --legal-navy: #1a365d;
-    --legal-burgundy: #8b0000;
-    --legal-gold: #d4af37;
-    --legal-parchment: #f9f6f0;
-    --legal-offwhite: #fffdfa;
-    --legal-border: #e0d7cc;
+    --ai-primary: #1a1a2e;
+    --ai-secondary: #16213e;
+    --ai-accent: #0f4c75;
+    --ai-bright: #00d4ff;
+    --ai-gradient-start: #667eea;
+    --ai-gradient-end: #764ba2;
+    --ai-surface: #f8fafc;
+    --ai-border: #e2e8f0;
+    --ai-text: #334155;
+    --ai-success: #10b981;
   }
 
-  .bg-legal-navy { background-color: var(--legal-navy); }
-  .bg-legal-burgundy { background-color: var(--legal-burgundy); }
-  .bg-legal-parchment { background-color: var(--legal-parchment); }
-  .bg-legal-offwhite { background-color: var(--legal-offwhite); }
+  .bg-ai-primary { background-color: var(--ai-primary); }
+  .bg-ai-secondary { background-color: var(--ai-secondary); }
+  .bg-ai-accent { background-color: var(--ai-accent); }
+  .bg-ai-bright { background-color: var(--ai-bright); }
+  .bg-ai-surface { background-color: var(--ai-surface); }
+  .bg-ai-gradient { background: linear-gradient(135deg, var(--ai-gradient-start), var(--ai-gradient-end)); }
   
-  .text-legal-gold { color: var(--legal-gold); }
-  .text-legal-darknavy { color: var(--legal-navy); }
+  .text-ai-bright { color: var(--ai-bright); }
+  .text-ai-primary { color: var(--ai-primary); }
+  .text-ai-text { color: var(--ai-text); }
+  .text-ai-success { color: var(--ai-success); }
   
-  .border-legal-border { border-color: var(--legal-border); }
+  .border-ai-border { border-color: var(--ai-border); }
   
-  .shadow-legal {
-    box-shadow: 0 4px 6px -1px rgba(26, 54, 93, 0.1),
-                0 2px 4px -1px rgba(26, 54, 93, 0.06);
+  .shadow-ai {
+    box-shadow: 0 4px 6px -1px rgba(26, 26, 46, 0.1),
+                0 2px 4px -1px rgba(26, 26, 46, 0.06);
+  }
+
+  /* Modern AI gradient backgrounds */
+  .bg-ai-card-gradient {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  }
+  
+  .bg-ai-header-gradient {
+    background: linear-gradient(135deg, var(--ai-primary) 0%, var(--ai-secondary) 50%, var(--ai-accent) 100%);
   }
